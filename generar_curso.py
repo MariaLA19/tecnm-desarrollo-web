@@ -3,7 +3,7 @@
 Generador oficial del curso Desarrollo de Aplicaciones Web (DAB-2201).
 
 Produce, a partir de una sola fuente de datos:
-  - 40 presentaciones HTML (7 diapositivas: objetivos, conceptos, teoría,
+  - 40 presentaciones HTML (8 diapositivas: objetivos, conceptos, teoría,
     arquitectura, errores y resultado final).
   - 40 cuadernos de laboratorio con enfoque "resultado primero": el
     estudiante ve exactamente qué debe lograr y un verificador automático
@@ -30,6 +30,12 @@ import re
 import shutil
 from pathlib import Path
 
+from pygments import highlight
+from pygments.formatters import HtmlFormatter
+from pygments.lexers import TextLexer, get_lexer_by_name
+from pygments.util import ClassNotFound
+
+from datos_codigo import CODIGO
 from datos_teoria import TEORIA
 from datos_sesiones_b1 import BLOQUE_1
 from datos_sesiones_b2 import BLOQUE_2
@@ -57,6 +63,7 @@ CAMPOS_OBLIGATORIOS = {
     "reto",
     "verificacion",
     "entrega",
+    "codigo",
 }
 
 CSS = r"""
@@ -292,6 +299,30 @@ table.cases code { font-family: var(--mono); font-size: 0.74rem; background: #f1
 .criteria-card h3 { margin-bottom: 8px; }
 .criteria-card ul { padding-left: 18px; }
 .criteria-card li { font-size: 0.8rem; line-height: 1.42; margin-bottom: 6px; }
+.code-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+.code-card { background: #0d1726; border: 1px solid #26364a; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 24px rgba(2, 8, 20, 0.18); }
+.code-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; background: #132033; border-bottom: 1px solid #26364a; }
+.code-card-head code { background: none; color: #8ea4bd; font-size: 0.7rem; padding: 0; }
+.pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-family: var(--mono); font-size: 0.64rem; font-weight: 800; letter-spacing: 0.04em; white-space: nowrap; }
+.pill.lab { background: #ddf4ff; color: #0550ae; }
+.pill.proj { background: #dafbe1; color: #116329; }
+pre.code-panel { margin: 0; padding: 12px 14px; color: #e6edf6; font-family: var(--mono); font-size: 0.76rem; line-height: 1.5; white-space: pre-wrap; word-break: break-word; max-height: 44vh; overflow: auto; }
+.code-watch { padding: 9px 12px 10px; border-top: 1px solid #26364a; background: #111d2e; }
+.code-watch ul { list-style: none; padding: 0; margin: 0; }
+.code-watch li { position: relative; padding-left: 14px; margin-bottom: 4px; font-size: 0.79rem; line-height: 1.38; color: #b9cad9; }
+.code-watch li::before { content: "→"; position: absolute; left: 0; color: #7ee787; }
+.code-watch code { background: rgba(255,255,255,0.08); color: #e6edf6; }
+.code-panel .k, .code-panel .kn, .code-panel .kd { color: #ff7b72; }
+.code-panel .s, .code-panel .s1, .code-panel .s2, .code-panel .sb, .code-panel .sd { color: #a5d6ff; }
+.code-panel .c1, .code-panel .cm, .code-panel .c { color: #8b949e; font-style: italic; }
+.code-panel .nf, .code-panel .fm { color: #d2a8ff; }
+.code-panel .nd { color: #ffa657; }
+.code-panel .mi, .code-panel .mf { color: #79c0ff; }
+.code-panel .nb, .code-panel .bp { color: #ffa657; }
+.code-panel .o, .code-panel .ow { color: #ff7b72; }
+.code-panel .nc { color: #f2cc60; }
+.code-panel .nn { color: #e6edf6; }
+.code-panel .err { color: #ff7b72; }
 footer {
   flex: 0 0 auto;
   height: 52px;
@@ -323,6 +354,8 @@ ul.clean li::before { content: "→"; position: absolute; left: 0; color: var(--
   .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .layout-result { grid-template-columns: 1fr; }
+  .code-grid { grid-template-columns: 1fr; }
+  pre.code-panel { max-height: 30vh; }
 }
 @media print {
   body { overflow: visible; height: auto; }
@@ -387,6 +420,9 @@ def cargar_sesiones() -> dict[int, dict]:
         datos = dict(teoria)
         datos.update(ENRIQUECIMIENTO[numero])
         datos["numero"] = numero
+        if numero not in CODIGO:
+            raise SystemExit(f"Falta el ejemplo de código de la sesión {numero:02d}")
+        datos["codigo"] = CODIGO[numero]
         faltantes = CAMPOS_OBLIGATORIOS - set(datos)
         if faltantes:
             raise SystemExit(f"Sesión {numero:02d}: faltan campos {sorted(faltantes)}")
@@ -533,6 +569,38 @@ def botones_sesion(numero: int) -> str:
     </div>"""
 
 
+def panel_codigo(panel: dict, etiqueta: str, clase: str) -> str:
+    try:
+        lexer = get_lexer_by_name(panel["lenguaje"], stripnl=False)
+    except ClassNotFound:
+        lexer = TextLexer(stripnl=False)
+    resaltado = highlight(panel["codigo"], lexer, HtmlFormatter(nowrap=True))
+    mirada = "".join(f"<li>{e(item)}</li>" for item in panel["mirada"])
+    return f"""
+        <div class="code-card">
+          <div class="code-card-head">
+            <span class="pill {clase}">{etiqueta}</span>
+            <code>{e(panel["archivo"])}</code>
+          </div>
+          <pre class="code-panel">{resaltado}</pre>
+          <div class="code-watch"><ul>{mirada}</ul></div>
+        </div>"""
+
+
+def codigo_slide(datos: dict) -> str:
+    codigo = datos["codigo"]
+    return f"""
+      <div class="kicker green">Código en contexto</div>
+      <h2>Así se ve en el laboratorio y en tu proyecto</h2>
+      <p class="lead">Extractos reales, no aplicaciones completas. El proyecto usa <code>Tablero</code> como ejemplo; adapta los nombres a tu dominio.</p>
+      <div class="code-grid">
+        {panel_codigo(codigo["lab"], "EN EL LABORATORIO", "lab")}
+        {panel_codigo(codigo["proyecto"], "EN TU PROYECTO", "proj")}
+      </div>
+      <div class="callout blue"><strong>Qué cambia:</strong> {e(codigo["nota"])}</div>
+    """
+
+
 def presentacion_encuadre(datos: dict) -> str:
     n = datos["numero"]
     tema = datos["tema"]
@@ -588,6 +656,7 @@ def presentacion_encuadre(datos: dict) -> str:
 """,
         )
     )
+    html_partes.append(diapositiva(codigo_slide(datos)))
     html_partes.append(
         diapositiva(
             f"""
@@ -793,6 +862,7 @@ def presentacion(numero: int, datos: dict) -> str:
 """,
         )
     )
+    html_partes.append(diapositiva(codigo_slide(datos)))
     html_partes.append(
         diapositiva(
             f"""
@@ -1215,15 +1285,16 @@ Repositorio oficial y entorno de laboratorio interactivo del curso de **Desarrol
 
 ## 🧭 Cómo leer una sesión
 
-Cada presentación tiene **7 diapositivas** con la misma estructura:
+Cada presentación de sesión tiene **8 diapositivas**. Las sesiones 02–40 siguen este orden; la sesión 01 es el encuadre y adapta las secciones:
 
 1. **Portada:** tema explícito, pregunta detonadora y objetivos de la clase.
 2. **Mapa de la sesión:** qué veremos, en qué orden y qué necesitas traer.
 3. **Conceptos desde cero:** cuatro términos clave con definición y analogía.
 4. **Fundamentos:** la teoría central del tema.
 5. **Cómo funciona por dentro:** arquitectura y modelo mental.
-6. **Errores comunes:** antipatrones y cómo los detecta la verificación.
-7. **Resultado final:** el comportamiento exacto que debe tener tu API y el enlace al cuaderno.
+6. **Código en contexto:** el mismo concepto en el laboratorio y en tu proyecto integrador.
+7. **Errores comunes:** antipatrones y cómo los detecta la verificación.
+8. **Resultado final:** el comportamiento exacto que debe tener tu API y el enlace al cuaderno.
 
 Cada laboratorio sigue el principio de **resultado primero**:
 

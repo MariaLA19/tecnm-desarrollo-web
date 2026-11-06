@@ -21,15 +21,16 @@ Repositorio oficial y entorno de laboratorio interactivo del curso de **Desarrol
 
 ## 🧭 Cómo leer una sesión
 
-Cada presentación tiene **7 diapositivas** con la misma estructura:
+Cada presentación de sesión tiene **8 diapositivas**. Las sesiones 02–40 siguen este orden; la sesión 01 es el encuadre y adapta las secciones:
 
 1. **Portada:** tema explícito, pregunta detonadora y objetivos de la clase.
 2. **Mapa de la sesión:** qué veremos, en qué orden y qué necesitas traer.
 3. **Conceptos desde cero:** cuatro términos clave con definición y analogía.
 4. **Fundamentos:** la teoría central del tema.
 5. **Cómo funciona por dentro:** arquitectura y modelo mental.
-6. **Errores comunes:** antipatrones y cómo los detecta la verificación.
-7. **Resultado final:** el comportamiento exacto que debe tener tu API y el enlace al cuaderno.
+6. **Código en contexto:** el mismo concepto en el laboratorio y en tu proyecto integrador.
+7. **Errores comunes:** antipatrones y cómo los detecta la verificación.
+8. **Resultado final:** el comportamiento exacto que debe tener tu API y el enlace al cuaderno.
 
 Cada laboratorio sigue el principio de **resultado primero**:
 

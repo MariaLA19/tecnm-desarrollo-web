@@ -237,6 +237,30 @@ table.cases code { font-family: var(--mono); font-size: 0.74rem; background: #f1
 .criteria-card h3 { margin-bottom: 8px; }
 .criteria-card ul { padding-left: 18px; }
 .criteria-card li { font-size: 0.8rem; line-height: 1.42; margin-bottom: 6px; }
+.code-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+.code-card { background: #0d1726; border: 1px solid #26364a; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 24px rgba(2, 8, 20, 0.18); }
+.code-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; background: #132033; border-bottom: 1px solid #26364a; }
+.code-card-head code { background: none; color: #8ea4bd; font-size: 0.7rem; padding: 0; }
+.pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-family: var(--mono); font-size: 0.64rem; font-weight: 800; letter-spacing: 0.04em; white-space: nowrap; }
+.pill.lab { background: #ddf4ff; color: #0550ae; }
+.pill.proj { background: #dafbe1; color: #116329; }
+pre.code-panel { margin: 0; padding: 12px 14px; color: #e6edf6; font-family: var(--mono); font-size: 0.76rem; line-height: 1.5; white-space: pre-wrap; word-break: break-word; max-height: 44vh; overflow: auto; }
+.code-watch { padding: 9px 12px 10px; border-top: 1px solid #26364a; background: #111d2e; }
+.code-watch ul { list-style: none; padding: 0; margin: 0; }
+.code-watch li { position: relative; padding-left: 14px; margin-bottom: 4px; font-size: 0.79rem; line-height: 1.38; color: #b9cad9; }
+.code-watch li::before { content: "→"; position: absolute; left: 0; color: #7ee787; }
+.code-watch code { background: rgba(255,255,255,0.08); color: #e6edf6; }
+.code-panel .k, .code-panel .kn, .code-panel .kd { color: #ff7b72; }
+.code-panel .s, .code-panel .s1, .code-panel .s2, .code-panel .sb, .code-panel .sd { color: #a5d6ff; }
+.code-panel .c1, .code-panel .cm, .code-panel .c { color: #8b949e; font-style: italic; }
+.code-panel .nf, .code-panel .fm { color: #d2a8ff; }
+.code-panel .nd { color: #ffa657; }
+.code-panel .mi, .code-panel .mf { color: #79c0ff; }
+.code-panel .nb, .code-panel .bp { color: #ffa657; }
+.code-panel .o, .code-panel .ow { color: #ff7b72; }
+.code-panel .nc { color: #f2cc60; }
+.code-panel .nn { color: #e6edf6; }
+.code-panel .err { color: #ff7b72; }
 footer {
   flex: 0 0 auto;
   height: 52px;
@@ -268,6 +292,8 @@ ul.clean li::before { content: "→"; position: absolute; left: 0; color: var(--
   .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .layout-result { grid-template-columns: 1fr; }
+  .code-grid { grid-template-columns: 1fr; }
+  pre.code-panel { max-height: 30vh; }
 }
 @media print {
   body { overflow: visible; height: auto; }
@@ -378,6 +404,48 @@ ul.clean li::before { content: "→"; position: absolute; left: 0; color: var(--
         <div class="small" style="margin-top:7px; border-top:1px dashed var(--border); padding-top:7px;">Garantiza control de tráfico unificado en sistemas distribuidos.</div>
       </div></div>
 </div></section>
+    <section class="slide"><div class="slide-inner">
+      <div class="kicker green">Código en contexto</div>
+      <h2>Así se ve en el laboratorio y en tu proyecto</h2>
+      <p class="lead">Extractos reales, no aplicaciones completas. El proyecto usa <code>Tablero</code> como ejemplo; adapta los nombres a tu dominio.</p>
+      <div class="code-grid">
+        
+        <div class="code-card">
+          <div class="code-card-head">
+            <span class="pill lab">EN EL LABORATORIO</span>
+            <code>app.py</code>
+          </div>
+          <pre class="code-panel"><span class="nd">@app</span><span class="o">.</span><span class="n">middleware</span><span class="p">(</span><span class="s2">"http"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">limitar</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">call_next</span><span class="p">):</span>
+    <span class="n">cliente</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">host</span>
+    <span class="k">if</span> <span class="n">contador</span><span class="p">[</span><span class="n">cliente</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span>
+            <span class="n">status_code</span><span class="o">=</span><span class="mi">429</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">"Retry-After"</span><span class="p">:</span> <span class="s2">"60"</span><span class="p">},</span>
+            <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s2">"error"</span><span class="p">:</span> <span class="s2">"límite alcanzado"</span><span class="p">},</span>
+        <span class="p">)</span>
+    <span class="n">contador</span><span class="p">[</span><span class="n">cliente</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">call_next</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</pre>
+          <div class="code-watch"><ul><li>El contador es por cliente, no global.</li><li><code>429</code> y <code>Retry-After</code> le dicen al cliente cuándo volver.</li></ul></div>
+        </div>
+        
+        <div class="code-card">
+          <div class="code-card-head">
+            <span class="pill proj">EN TU PROYECTO</span>
+            <code>src/core/rate_limit.py (opcional)</code>
+          </div>
+          <pre class="code-panel"><span class="k">class</span><span class="w"> </span><span class="nc">RateLimitMiddleware</span><span class="p">(</span><span class="n">BaseHTTPMiddleware</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">call_next</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">limitador</span><span class="o">.</span><span class="n">permitir</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">host</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">429</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s2">"error"</span><span class="p">:</span> <span class="s2">"límite"</span><span class="p">})</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">call_next</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</pre>
+          <div class="code-watch"><ul><li>Rate limiting no es obligatorio en el proyecto.</li><li>Si lo agregas, va en <code>core/</code> y cubre toda la API.</li></ul></div>
+        </div>
+      </div>
+      <div class="callout blue"><strong>Qué cambia:</strong> Concepto opcional en el proyecto; obligatorio en el laboratorio para entender el 429.</div>
+    </div></section>
     <section class="slide"><div class="slide-inner">
       <div class="kicker red">Errores comunes</div>
       <h2>Puntos de Falla en Rate Limiting</h2>

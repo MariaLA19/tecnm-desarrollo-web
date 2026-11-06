@@ -237,6 +237,30 @@ table.cases code { font-family: var(--mono); font-size: 0.74rem; background: #f1
 .criteria-card h3 { margin-bottom: 8px; }
 .criteria-card ul { padding-left: 18px; }
 .criteria-card li { font-size: 0.8rem; line-height: 1.42; margin-bottom: 6px; }
+.code-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+.code-card { background: #0d1726; border: 1px solid #26364a; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 24px rgba(2, 8, 20, 0.18); }
+.code-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; background: #132033; border-bottom: 1px solid #26364a; }
+.code-card-head code { background: none; color: #8ea4bd; font-size: 0.7rem; padding: 0; }
+.pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-family: var(--mono); font-size: 0.64rem; font-weight: 800; letter-spacing: 0.04em; white-space: nowrap; }
+.pill.lab { background: #ddf4ff; color: #0550ae; }
+.pill.proj { background: #dafbe1; color: #116329; }
+pre.code-panel { margin: 0; padding: 12px 14px; color: #e6edf6; font-family: var(--mono); font-size: 0.76rem; line-height: 1.5; white-space: pre-wrap; word-break: break-word; max-height: 44vh; overflow: auto; }
+.code-watch { padding: 9px 12px 10px; border-top: 1px solid #26364a; background: #111d2e; }
+.code-watch ul { list-style: none; padding: 0; margin: 0; }
+.code-watch li { position: relative; padding-left: 14px; margin-bottom: 4px; font-size: 0.79rem; line-height: 1.38; color: #b9cad9; }
+.code-watch li::before { content: "→"; position: absolute; left: 0; color: #7ee787; }
+.code-watch code { background: rgba(255,255,255,0.08); color: #e6edf6; }
+.code-panel .k, .code-panel .kn, .code-panel .kd { color: #ff7b72; }
+.code-panel .s, .code-panel .s1, .code-panel .s2, .code-panel .sb, .code-panel .sd { color: #a5d6ff; }
+.code-panel .c1, .code-panel .cm, .code-panel .c { color: #8b949e; font-style: italic; }
+.code-panel .nf, .code-panel .fm { color: #d2a8ff; }
+.code-panel .nd { color: #ffa657; }
+.code-panel .mi, .code-panel .mf { color: #79c0ff; }
+.code-panel .nb, .code-panel .bp { color: #ffa657; }
+.code-panel .o, .code-panel .ow { color: #ff7b72; }
+.code-panel .nc { color: #f2cc60; }
+.code-panel .nn { color: #e6edf6; }
+.code-panel .err { color: #ff7b72; }
 footer {
   flex: 0 0 auto;
   height: 52px;
@@ -268,6 +292,8 @@ ul.clean li::before { content: "→"; position: absolute; left: 0; color: var(--
   .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .layout-result { grid-template-columns: 1fr; }
+  .code-grid { grid-template-columns: 1fr; }
+  pre.code-panel { max-height: 30vh; }
 }
 @media print {
   body { overflow: visible; height: auto; }
@@ -378,6 +404,52 @@ ul.clean li::before { content: "→"; position: absolute; left: 0; color: var(--
         <div class="small" style="margin-top:7px; border-top:1px dashed var(--border); padding-top:7px;">Facilita la auditoría visual y la trazabilidad de regresiones en el código.</div>
       </div></div>
 </div></section>
+    <section class="slide"><div class="slide-inner">
+      <div class="kicker green">Código en contexto</div>
+      <h2>Así se ve en el laboratorio y en tu proyecto</h2>
+      <p class="lead">Extractos reales, no aplicaciones completas. El proyecto usa <code>Tablero</code> como ejemplo; adapta los nombres a tu dominio.</p>
+      <div class="code-grid">
+        
+        <div class="code-card">
+          <div class="code-card-head">
+            <span class="pill lab">EN EL LABORATORIO</span>
+            <code>coleccion.json</code>
+          </div>
+          <pre class="code-panel"><span class="p">{</span>
+<span class="w">  </span><span class="nt">"info"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Biblioteca E2E"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"schema"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"item"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"login"</span><span class="p">,</span><span class="w"> </span><span class="nt">"event"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">"listen"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w"> </span><span class="nt">"script"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"exec"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">"pm.response.to.have.status(200);"</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">"pm.environment.set('token', pm.response.json().access_token);"</span>
+<span class="w">    </span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre>
+          <div class="code-watch"><ul><li>La colección encadena peticiones: el token del login se usa después.</li><li>Las aserciones validan estado y cuerpo, no solo que responda.</li></ul></div>
+        </div>
+        
+        <div class="code-card">
+          <div class="code-card-head">
+            <span class="pill proj">EN TU PROYECTO</span>
+            <code>tests/e2e/coleccion.json</code>
+          </div>
+          <pre class="code-panel"><span class="p">{</span>
+<span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Proyecto E2E"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"item"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"crear tablero"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="p">,</span><span class="w"> </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{{base_url}}/api/tableros"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"header"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Authorization"</span><span class="p">,</span><span class="w"> </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer {{token}}"</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre>
+          <div class="code-watch"><ul><li>El proyecto usa la misma colección con sus rutas y su dominio.</li><li>La variable <code>{{token}}</code> viene del login anterior.</li></ul></div>
+        </div>
+      </div>
+      <div class="callout blue"><strong>Qué cambia:</strong> Una prueba E2E no es solo el 200: también valida el JSON y el flujo.</div>
+    </div></section>
     <section class="slide"><div class="slide-inner">
       <div class="kicker red">Errores comunes</div>
       <h2>Antipatrones en Pruebas E2E</h2>
