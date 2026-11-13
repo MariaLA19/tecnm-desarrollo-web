@@ -1,4 +1,4 @@
-# Auditoría Sesión 14 · Hashing Seguro de Contraseñas (Bcrypt)
+# Bitacora de la Sesión 14 · Hashing Seguro de Contraseñas (Bcrypt)
 **Materia:** Desarrollo de Aplicaciones Web (DAB-2201)
 **Docente Titular:** MCC. Iván Márquez Larios (ijmarquezl)
 **Estudiante:** Martha Maria Lopez Alejandro
