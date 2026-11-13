@@ -1,4 +1,4 @@
-# Auditoría Sesión 03 · Headers, Content-Type y Negociación de Contenido
+# Bitacora de la Sesión 03 · Headers, Content-Type y Negociación de Contenido
 **Estudiante:** Martha Maria Lopez Alejandro
 **Materia:** Desarrollo de Aplicaciones Web (DAB-2201) · TecNM Cancún
 
