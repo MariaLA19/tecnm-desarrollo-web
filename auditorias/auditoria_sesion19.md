@@ -61,7 +61,7 @@ Desde el inicio pensar en los dos lugares: dónde se guarda y dónde se muestra.
 ## 6. Evidencia
 
 **Commit:** https://github.com/MariaLA19/tecnm-desarrollo-web/blob/main/auditorias/auditoria_sesion19.md
-**Cuaderno ejecutado:** Verificado en Google Colab con 3/3 en verde
+**Cuaderno ejecutado:** https://colab.research.google.com/github/ijmarquezl/tecnm-desarrollo-web/blob/main/laboratorios/sesion19/sesion19_laboratorio.
 **Presentación:** https://ijmarquezl.github.io/tecnm-desarrollo-web/presentaciones/sesion19.html
 
 **Firma digital:** MariaLA19
