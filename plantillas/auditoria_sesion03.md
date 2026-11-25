@@ -56,8 +56,8 @@ Aprendí que si se pierde el archivo hay que volver a ejecutar la celda de Prepa
 Ejecutar las celdas en orden desde arriba, sin saltarme la de Preparación.
 
 ## 6. Evidencia
-**Commit:** https://github.com/MariaLA19/tecnm-desarrollo-web/blob/main/auditorias/auditoria_sesion03.md 
-**Cuaderno ejecutado:** https://github.com/MariaLA19/tecnm-desarrollo-web/blob/main/auditorias/auditoria_sesion03.md
+**Commit:** https://github.com/MariaLA19/tecnm-desarrollo-web/blob/main/auditorias/auditoria_sesion03.md
+**Cuaderno ejecutado:** https://colab.research.google.com/github/ijmarquezl/tecnm-desarrollo-web/blob/main/laboratorios/sesion03/sesion03_laboratorio.
 **Presentación:** https://ijmarquezl.github.io/tecnm-desarrollo-web/presentaciones/sesion03.html
 
 **Firma digital:** MariaLA19
